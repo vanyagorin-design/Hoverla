@@ -2,27 +2,20 @@ import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import rateLimit from 'express-rate-limit'
-import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 
 const app = express()
 
 app.use(express.json())
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }))
 
-// Rate limiter
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 })
 app.use(limiter)
 
-// Health check
 app.get('/api/health', (_req, res) => res.json({ ok: true }))
 
-// Nodemailer transport (Gmail SMTP)
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT || '587', 10),
-  secure: process.env.SMTP_SECURE === 'true',
-  auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-})
+// === Resend setup ===
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 app.post('/api/contact', async (req, res) => {
   try {
@@ -40,19 +33,23 @@ app.post('/api/contact', async (req, res) => {
       <p><strong>Zpráva:</strong><br/>${(message || '-').replace(/\n/g, '<br/>')}</p>
     `
 
-    await transporter.sendMail({
-      from: `Hoverla Plzeň Web <${process.env.FROM_EMAIL || process.env.SMTP_USER}>`,
+    const { error } = await resend.emails.send({
+      from: 'Hoverla Plzeň <onboarding@resend.dev>', // тимчасово працює без верифікації домену
       to: process.env.TO_EMAIL,
+      reply_to: email,
       subject: `Nová registrace hráče: ${name}`,
-      replyTo: email,
-      text: `Jméno: ${name}\nE-mail: ${email}\nTelefon: ${phone || '-'}\nPozice: ${position}\nZpráva: ${message || '-'}`,
       html,
     })
+
+    if (error) {
+      console.error('Resend error:', error)
+      return res.status(500).json({ ok: false, error: 'Email send failed' })
+    }
 
     res.json({ ok: true })
   } catch (err) {
     console.error(err)
-    res.status(500).json({ ok: false, error: 'Email send failed' })
+    res.status(500).json({ ok: false, error: 'Server error' })
   }
 })
 
