@@ -2,17 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Фокус-стиль без кастомної палітри (щоб не ламалось на Vercel) */
-:focus-visible {
-  outline: 2px solid #22c55e; /* зелений */
-  outline-offset: 2px;
-}
-
-html, body, #root {
-  height: 100%;
-}
-
-body {
-  background: #000;
-  color: #fff;
-}
+/* мінімум, без кастомних theme() */
+html, body, #root { height: 100%; }
+body { background: #000; color: #fff; }
