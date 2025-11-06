@@ -2,12 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: light;
+/* Фокус-стиль без кастомної палітри (щоб не ламалось на Vercel) */
+:focus-visible {
+  outline: 2px solid #22c55e; /* зелений */
+  outline-offset: 2px;
+}
+
+html, body, #root {
+  height: 100%;
 }
 
 body {
-  @apply bg-gradient-to-br from-green-100 to-yellow-50;
-  margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+  background: #000;
+  color: #fff;
 }
