@@ -127,14 +127,32 @@ function Navbar({ lang, setLang }) {
 function Home({ lang }) {
   const t = translations[lang]
   return (
-    <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center p-6">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-green-800 mb-6 drop-shadow-md">
-        {t.welcome}
-      </h2>
-      <p className="text-lg text-gray-700 mb-6">🏐 Hoverla Plzeň Volleyball Club</p>
-      <Link to="/team" className="px-6 py-3 bg-green-700 text-yellow-300 rounded-xl font-bold shadow-lg hover:bg-green-900 hover:text-white transition">
-        {t.team}
-      </Link>
+    <div className="min-h-[calc(100vh-80px)] w-full flex flex-col items-center justify-center p-6">
+      <div className="w-full max-w-6xl">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-green-800 mb-6 drop-shadow-md text-center">
+          {t.welcome}
+        </h2>
+        <p className="text-lg text-gray-700 mb-8 text-center">🏐 Hoverla Plzeň Volleyball Club</p>
+        <figure className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-green-100">
+          <img
+            src="/images/team.jpg"
+            alt="Tým Hoverla Plzeň během společné fotografie"
+            className="w-full h-auto object-cover"
+            loading="eager"
+          />
+          <figcaption className="px-6 py-4 bg-green-800/90 text-yellow-200 text-center text-base md:text-lg">
+            Hoverla Plzeň — спільне командне фото сезону 2024/2025
+          </figcaption>
+        </figure>
+        <div className="flex justify-center mt-8">
+          <Link
+            to="/team"
+            className="px-6 py-3 bg-green-700 text-yellow-300 rounded-xl font-bold shadow-lg hover:bg-green-900 hover:text-white transition"
+          >
+            {t.team}
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
