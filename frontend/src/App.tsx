@@ -1,12 +1,6 @@
-import { Suspense } from 'react';
-import { useRoutes } from 'react-router-dom';
-import { routes } from './routes';
+import React from "react";
+import Home from "./pages/Home";
 
-export default function App() {
-  const element = useRoutes(routes);
-  return (
-    <Suspense fallback={<div className="min-h-screen grid place-items-center text-center p-6">Завантаження…</div>}>
-      {element}
-    </Suspense>
-  );
+export default function App(): JSX.Element {
+  return <Home />;
 }
